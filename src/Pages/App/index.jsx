@@ -1,33 +1,31 @@
-import{useRoutes, BrowserRouter} from 'react-router-dom'
+import { useRoutes, BrowserRouter } from 'react-router-dom'
 import Home from '../Home'
-import MyAcount from '../MyAccount'
+import MyAccount from '../MyAccount'
 import MyOrder from '../MyOrder'
 import MyOrders from '../MyOrders'
-import NotFound from '../NotFound/Index'
+import NotFound from '../NotFound'
 import SignIn from '../SignIn'
+import Navbar from '../../components/Navbar'
 import './App.css'
-import NavBar from '../../components/Navbar'
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: "/", element: <Home /> },
-    { path: "/home", element: <Home /> },
-    { path: "/signin", element: <SignIn /> },
-    { path: "/my-account/:id", element: <MyAcount /> },
-    { path: "/my-order/:id", element: <MyOrder /> },
-    { path: "/my-orders", element: <MyOrders /> },
-    { path: "*", element: <NotFound /> },
-  ]);
+    { path: '/', element: <Home /> },
+    { path: '/my-account', element: <MyAccount /> },
+    { path: '/my-order', element: <MyOrder /> },
+    { path: '/my-orders', element: <MyOrders /> },
+    { path: '/sign-in', element: <SignIn /> },
+    { path: '/*', element: <NotFound /> },
+  ])
 
-  return routes;
-};
+  return routes
+}
 
-function App() {
-
+const App = () => {
   return (
     <BrowserRouter>
-      <AppRoutes/>
-      <NavBar/>
+      <AppRoutes />
+      <Navbar />
     </BrowserRouter>
   )
 }

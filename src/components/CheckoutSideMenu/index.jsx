@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { ShopiCartContext } from '../../Context'
+import OrderCard from '../OrderCard'
 import './styles.css'
 
 const ChekoutSideMenu = ()=> {
@@ -13,6 +14,13 @@ const ChekoutSideMenu = ()=> {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </div>
+            </div>
+            <div className='px-6 overflow-y-scroll'>
+            {
+                context.cartProducts.map(product=>
+                    <OrderCard key={product.id} title={product.title} imageUrl = {product.image} price={product.price} />
+                )
+            }
             </div>
         </aside>
     )

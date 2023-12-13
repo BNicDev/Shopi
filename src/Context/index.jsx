@@ -22,6 +22,8 @@ export const ShopiCartProvider = ({children}) => {
 
   //cart products
   const [cartProducts, setCartProducts ] = useState([])
+  //my orders
+  const [orders, setOrders] = useState([])
 
 
   return (
@@ -37,7 +39,9 @@ export const ShopiCartProvider = ({children}) => {
        setCartProducts,
        openChekout,
       closeCheckout,
-      ischecoutOpen
+      ischecoutOpen,
+      orders,
+      setOrders
     }}>
       {children}
     </ShopiCartContext.Provider>

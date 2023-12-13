@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { ShopiCartContext } from '../../Context'
 import OrderCard from '../OrderCard'
 import { totalPrice } from '../../Utils'
@@ -9,6 +10,17 @@ const ChekoutSideMenu = ()=> {
     const handleDelete = (id)=>{
         const filteredProducts = context.cartProducts.filter(product => product.id != id)
         context.setCartProducts(filteredProducts)
+    }
+    const handleCheckout =()=>{
+        const orderToAdd ={
+            date: '01.02.23',
+            products: context.cartProducts,
+            totalProducts: context.cartProducts.length,
+            totalPrice: totalPrice(context.cartProducts)
+        }
+
+        context.setOrders([...context.orders, orderToAdd])
+        context.setCartProducts([])
     }
 
     return(
@@ -21,18 +33,21 @@ const ChekoutSideMenu = ()=> {
                     </svg>
                 </div>
             </div>
-            <div className='px-6 overflow-y-scroll'>
+            <div className='px-6 overflow-y-scroll flex-1'>
             {
                 context.cartProducts.map(product=>
                     <OrderCard key={product.id} id={product.id} title={product.title} imageUrl = {product.image} price={product.price} handleDelete={handleDelete} />
                 )
             }
             </div>
-            <div className='px-6'>
-                <p className='flex justify-between items-center'>
+            <div className='px-6 mb-6'>
+                <p className='flex justify-between items-center mb-2'>
                     <span className='font-light'>Total:</span>
                     <span className='font-medium text-2xl'>${totalPrice(context.cartProducts)}</span>
                 </p>
+                <Link to='/my-orders/last'>
+                    <button className='w-full bg-black py-3 text-white rounded-lg' onClick={()=>handleCheckout()}>Checkout</button>
+                </Link>
             </div>
         </aside>
     )

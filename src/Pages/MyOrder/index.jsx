@@ -7,6 +7,9 @@ import OrderCard from '../../components/OrderCard'
 
 function MyOrder() {
   const context = useContext(ShopiCartContext)
+  const currentPath = window.location.pathname
+  let index = currentPath.substring(currentPath.lastIndexOf('/') + 1 )
+  if(index === 'last') index = context.orders?.length-1
 
   return (
     <Layout>
@@ -18,7 +21,7 @@ function MyOrder() {
       </div>
       <div className='flex flex-col w-80'>
         {
-          context.orders?.slice(-1)[0].products.map(product => (
+          context.orders?.[index]?.products.map(product => (
             <OrderCard
               key={product.id}
               id={product.id}

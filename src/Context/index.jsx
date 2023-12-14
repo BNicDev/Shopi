@@ -1,4 +1,6 @@
 import { createContext, useState } from 'react'
+import { useEffect } from 'react'
+
 
 export const ShopiCartContext = createContext()
 
@@ -25,6 +27,18 @@ export const ShopiCartProvider = ({children}) => {
   //my orders
   const [orders, setOrders] = useState([])
 
+  //get products 
+  const [items, setItems] = useState(null)
+  //get products by title
+  const [searchByTitle, setSearchByTitle] = useState(null)
+  console.log(searchByTitle)
+
+  useEffect(()=>{
+    fetch('https://fakestoreapi.com/products')
+    .then(response => response.json())
+    .then(data=>setItems(data))
+  },[])
+
 
   return (
     <ShopiCartContext.Provider value={{
@@ -41,7 +55,12 @@ export const ShopiCartProvider = ({children}) => {
       closeCheckout,
       ischecoutOpen,
       orders,
-      setOrders
+      setOrders,
+      items,
+      setItems,
+      searchByTitle,
+      setSearchByTitle
+
     }}>
       {children}
     </ShopiCartContext.Provider>

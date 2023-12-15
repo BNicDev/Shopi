@@ -5,6 +5,27 @@ import ProductDetail from "../../components/ProductDetail"
 import { ShopiCartContext } from '../../Context'
 function Home() {
   const context = useContext(ShopiCartContext)
+
+  const renderView = ()=>{
+    if(context.searchByTitle?.length > 0){
+      if(context.filteredItems?.length>0){
+        return(
+          context.filteredItems?.map(item => (
+            <Card key={item.id} data={item} />
+          ))
+        )
+      }else{
+        return <p className="text-center text-3xl mt-16">No items found</p>
+      }
+    }
+    else{
+      return(
+        context.items?.map(item => (
+          <Card key={item.id} data={item} />
+        ))
+      )
+    }
+  }
     return (
       <Layout>
          <div className='flex items-center justify-center relative w-80 mb-2'>
@@ -12,11 +33,7 @@ function Home() {
       </div>
       <input type="text" placeholder="Search" className="rounded-lg border-black w-80 p-4 mb-4 focus:outline-none" onChange={(event)=>context.setSearchByTitle(event.target.value)} />
         <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg'>
-        {
-          context.items?.map(item => (
-            <Card key={item.id} data={item} />
-          ))
-        }
+          {renderView()}
       </div>
       < ProductDetail/>
       </Layout>

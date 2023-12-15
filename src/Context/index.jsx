@@ -17,7 +17,6 @@ export const ShopiCartProvider = ({children}) => {
    const [ischecoutOpen, setIschecoutOpen ] = useState(false)
    const openChekout = () =>setIschecoutOpen(true)
    const closeCheckout = () =>setIschecoutOpen(false)
-   console.log(ischecoutOpen)
 
   //product Detail- show product 
   const [productToShow, setProductToShow ] = useState({})
@@ -29,9 +28,13 @@ export const ShopiCartProvider = ({children}) => {
 
   //get products 
   const [items, setItems] = useState(null)
+  //filtrado por titulo
+  const [filteredItems, setFilteredItems] = useState(null)
+  console.log('filtered:', filteredItems)
   //get products by title
   const [searchByTitle, setSearchByTitle] = useState(null)
-  console.log(searchByTitle)
+  //get products by category
+  const [searchByCategory, setSearchByCategory] = useState(null)
 
   useEffect(()=>{
     fetch('https://fakestoreapi.com/products')
@@ -39,19 +42,51 @@ export const ShopiCartProvider = ({children}) => {
     .then(data=>setItems(data))
   },[])
 
+  const filteredItemsByTitle =(items, searchByTitle)=>{
+    return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+  }
+  const filteredItemsByCategory =(items, searchByCategory)=>{
+    console.log(items)
+    return items?.filter(item => item.category.toLowerCase().includes(searchByCategory.toLowerCase()))
+  }
+const filterBy=(searchtype, items, searchByTitle, searchByCategory)=>{
+  if(searchtype==='BY_TITLE'){
+    return filteredItemsByTitle(items, searchByTitle)
+  }
+  if(searchtype==='BY_CATEGORY'){
+    return filteredItemsByCategory(items, searchByCategory)
+  }
+  if(searchtype==='BY_TITLE_AND_BY_CATEGORY'){
+    return filteredItemsByCategory(items, searchByCategory).filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+  }
+  if(!searchtype){
+    return items
+  }
+}
+
+  useEffect(()=>{
+    if(searchByCategory && searchByTitle ) setFilteredItems(filterBy('BY_TITLE_AND_BY_CATEGORY',items, searchByTitle, searchByCategory))
+    if(searchByTitle && !searchByCategory ) setFilteredItems(filterBy('BY_TITLE',items, searchByTitle,searchByCategory))
+    if(searchByCategory && !searchByTitle ) setFilteredItems(filterBy('BY_CATEGORY',items, searchByTitle, searchByCategory))
+    if(!searchByCategory && !searchByTitle ) setFilteredItems(filterBy(null,items, searchByTitle, searchByCategory))
+  },[items, searchByCategory,searchByTitle])
+
+
+  // console.log(filteredItems)
+
 
   return (
     <ShopiCartContext.Provider value={{
       counter,
       setCounter,
-       openProductDetail,
-       closeProductDetail,
-       isProductDetailOpen,
-       productToShow,
-       setProductToShow,
-       cartProducts,
-       setCartProducts,
-       openChekout,
+      openProductDetail,
+      closeProductDetail,
+      isProductDetailOpen,
+      productToShow,
+      setProductToShow,
+      cartProducts,
+      setCartProducts,
+      openChekout,
       closeCheckout,
       ischecoutOpen,
       orders,
@@ -59,7 +94,11 @@ export const ShopiCartProvider = ({children}) => {
       items,
       setItems,
       searchByTitle,
-      setSearchByTitle
+      setSearchByTitle,
+      filteredItems,
+      setFilteredItems,
+      searchByCategory,
+      setSearchByCategory
 
     }}>
       {children}

@@ -30,7 +30,6 @@ export const ShopiCartProvider = ({children}) => {
   const [items, setItems] = useState(null)
   //filtrado por titulo
   const [filteredItems, setFilteredItems] = useState(null)
-  console.log('filtered:', filteredItems)
   //get products by title
   const [searchByTitle, setSearchByTitle] = useState(null)
   //get products by category
@@ -69,6 +68,8 @@ const filterBy=(searchtype, items, searchByTitle, searchByCategory)=>{
     if(searchByTitle && !searchByCategory ) setFilteredItems(filterBy('BY_TITLE',items, searchByTitle,searchByCategory))
     if(searchByCategory && !searchByTitle ) setFilteredItems(filterBy('BY_CATEGORY',items, searchByTitle, searchByCategory))
     if(!searchByCategory && !searchByTitle ) setFilteredItems(filterBy(null,items, searchByTitle, searchByCategory))
+    return()=>{
+  setSearchByTitle(null)}
   },[items, searchByCategory,searchByTitle])
 
 
